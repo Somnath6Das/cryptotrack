@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key? key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -16,6 +16,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
 
+    //? Initiate theme provider.
     ThemeProvider themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     
     return Scaffold(
@@ -46,7 +47,7 @@ class _HomePageState extends State<HomePage> {
                     icon: (themeProvider.themeMode == ThemeMode.light)? const Icon(Icons.dark_mode): const Icon(Icons.light_mode))
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Expanded(child: Consumer<MarketProvider>(
@@ -56,9 +57,9 @@ class _HomePageState extends State<HomePage> {
                     child: CircularProgressIndicator(),
                   );
                 } else {
-                  if (marketProvider.markets.length > 0) {
+                  if (marketProvider.markets.isNotEmpty) {
                     return ListView.builder(
-                      physics: BouncingScrollPhysics(
+                      physics: const BouncingScrollPhysics(
                           parent: AlwaysScrollableScrollPhysics()),
                       itemCount: marketProvider.markets.length,
                       itemBuilder: (context, index) {
@@ -99,13 +100,13 @@ class _HomePageState extends State<HomePage> {
                                   //negative
                                   return Text(
                                     "${priceChangePercentage.toStringAsFixed(2)}% (${priceChange.toStringAsFixed(3)})",
-                                    style: TextStyle(color: Colors.red),
+                                    style: const TextStyle(color: Colors.red),
                                   );
                                 } else {
                                   //positive
                                   return Text(
                                     "+${priceChangePercentage.toStringAsFixed(2)}% (+${priceChange.toStringAsFixed(3)})",
-                                    style: TextStyle(color: Colors.green),
+                                    style: const TextStyle(color: Colors.green),
                                   );
                                 }
                               })
@@ -115,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                       },
                     );
                   } else {
-                    return Text("Data not found!");
+                    return const Center(child: CircularProgressIndicator(),);
                   }
                 }
               },

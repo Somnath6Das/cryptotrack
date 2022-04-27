@@ -1,17 +1,24 @@
 import 'package:cryptotrack/constants/themes.dart';
+import 'package:cryptotrack/models/local_storage.dart';
 import 'package:cryptotrack/pages/HomePage.dart';
 import 'package:cryptotrack/providers/market_provider.dart';
 import 'package:cryptotrack/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  //   ?? means if it is null the after ?? function will run.
+  String currentTheme = await LocalStorage.getTheme() ?? "light";
+  runApp(MyApp(
+    theme: currentTheme,
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
+  final String theme;
+  MyApp({required this.theme});
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -19,7 +26,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<MarketProvider>(
             create: (context) => MarketProvider()),
         ChangeNotifierProvider<ThemeProvider>(
-          create: (context) => ThemeProvider(),
+          create: (context) => ThemeProvider(theme),
         )
       ],
       child: Consumer<ThemeProvider>(
