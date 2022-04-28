@@ -12,7 +12,7 @@ class MarketProvider with ChangeNotifier {
     fetchData();
   }
 
-  void fetchData() async {
+  Future <void> fetchData() async {
     List<dynamic> _markets = await API.getMarkets();
 
     List<CryptroCurrency> temp = [];
@@ -26,10 +26,19 @@ class MarketProvider with ChangeNotifier {
     isLoading = false;
     notifyListeners();
 
-    //fetch api data every after 3 seconds
-    Timer(const Duration(seconds: 3), () {
-      fetchData();
-      print("Data Update");
-    });
+    
+    
+    //auto fetch api data every after 3 seconds
+    // Timer(const Duration(seconds: 15), () {
+    //   fetchData();
+    //   print("Data Update");
+    // });
+  }
+
+  //todo: fetch data by id for details page / 1
+  CryptroCurrency fetchCryptoById(String id) {
+    CryptroCurrency crypto =
+        markets.where((element) => element.id == id).toList()[0];
+    return crypto;
   }
 }

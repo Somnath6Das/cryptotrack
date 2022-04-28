@@ -1,11 +1,11 @@
 import 'package:cryptotrack/models/local_storage.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 
 
 class ThemeProvider with ChangeNotifier {
   
-  //?  This function create for set 
+  //!  This function create for set theme 
   late ThemeMode themeMode;
 
   ThemeProvider(String theme) {
@@ -18,7 +18,7 @@ class ThemeProvider with ChangeNotifier {
 
 
 
-//?   swich and save theme local storage.
+//!   swich and save theme local storage. *5
   void toggleTheme() async {
     if (themeMode == ThemeMode.light) {
       themeMode = ThemeMode.dark;

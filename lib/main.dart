@@ -10,6 +10,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   //   ?? means if it is null the after ?? function will run.
+  //!  instance of theme *3
   String currentTheme = await LocalStorage.getTheme() ?? "light";
   runApp(MyApp(
     theme: currentTheme,
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
         builder: (context, themeProvider, child) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
+            //! apply theme *2
             themeMode: themeProvider.themeMode,
             theme: lightTheme,
             darkTheme: darkTheme,

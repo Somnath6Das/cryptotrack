@@ -1,5 +1,8 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
+
+
+//! save and get theme data for app restart *4
 class LocalStorage {
   static Future<bool> saveTheme(String theme) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
