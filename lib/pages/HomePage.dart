@@ -1,6 +1,8 @@
 import 'package:cryptotrack/constants/themes.dart';
 import 'package:cryptotrack/models/cripto_currency.dart';
 import 'package:cryptotrack/pages/details_page.dart';
+import 'package:cryptotrack/pages/favorites.dart';
+import 'package:cryptotrack/pages/markets.dart';
 import 'package:cryptotrack/providers/market_provider.dart';
 import 'package:cryptotrack/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +15,16 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+//? extend with TickerProviderStateMixin for for tab bar.
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+  late TabController viewController;
+
+  @override
+  void initState() {
+    super.initState();
+    viewController = TabController(length: 2, vsync: this);
+  }
+
   @override
   Widget build(BuildContext context) {
     ThemeProvider themeProvider =
@@ -47,102 +58,36 @@ class _HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.all(0),
                     icon: (themeProvider.themeMode == ThemeMode.light)
                         ? const Icon(Icons.dark_mode)
-                        : const Icon(Icons.light_mode))
+                        : const Icon(Icons.light_mode,color: Colors.amber,))
               ],
             ),
-            const SizedBox(
-              height: 20,
-            ),
-            Expanded(child: Consumer<MarketProvider>(
-              builder: (context, marketProvider, child) {
-                if (marketProvider.isLoading == true) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else {
-                  if (marketProvider.markets.isNotEmpty) {
-                    return RefreshIndicator(
-                      onRefresh: () async {
-                        await marketProvider.fetchData();
-                      },
-                      child: ListView.builder(
-                        physics: const BouncingScrollPhysics(
-                            parent: AlwaysScrollableScrollPhysics()),
-                        itemCount: marketProvider.markets.length,
-                        itemBuilder: (context, index) {
-                          //todo: pass data details page/ initiate the data/ 2
-                          CryptroCurrency currentCrypto =
-                              marketProvider.markets[index];
-
-                          //left side information
-                          return ListTile(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      //todo: data pass through details page/ 3
-                                      builder: (context) => DetailsPage(
-                                            id: currentCrypto.id!,
-                                          )));
-                            },
-                            contentPadding: const EdgeInsets.all(0),
-                            leading: CircleAvatar(
-                              backgroundColor: Colors.white,
-                              backgroundImage:
-                                  NetworkImage(currentCrypto.image!),
-                            ),
-                            title: Text(currentCrypto.name! +
-                                "  #${currentCrypto.marketCapRank}"),
-                            subtitle: Text(currentCrypto.symbol!.toUpperCase()),
-
-                            //Right side information
-                            trailing: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  "₹ " +
-                                      currentCrypto.currentPrice!
-                                          .toStringAsFixed(4),
-                                  style: const TextStyle(
-                                      color: Color(0xff0395eb),
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18),
-                                ),
-                                Builder(builder: (context) {
-                                  double priceChange =
-                                      currentCrypto.priceChange24!;
-                                  double priceChangePercentage =
-                                      currentCrypto.priceChangePercentage24!;
-                                  if (priceChange < 0) {
-                                    //negative
-                                    return Text(
-                                      "${priceChangePercentage.toStringAsFixed(2)}% (${priceChange.toStringAsFixed(3)})",
-                                      style: const TextStyle(color: Colors.red),
-                                    );
-                                  } else {
-                                    //positive
-                                    return Text(
-                                      "+${priceChangePercentage.toStringAsFixed(2)}% (+${priceChange.toStringAsFixed(3)})",
-                                      style:
-                                          const TextStyle(color: Colors.green),
-                                    );
-                                  }
-                                })
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  } else {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                }
-              },
-            ))
+            const SizedBox(height: 20),
+            TabBar(
+                //? Tab bar and Tab bar view always need controller.
+                controller: viewController,
+                tabs: [
+                  Tab(
+                    child: Text(
+                      "Markets",
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  ),
+                  Tab(
+                    child: Text(
+                      "Favorites",
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  ),
+                ]),
+            Expanded(
+              //? tab bar view do not give any space to give space rap with expended
+              child: TabBarView(
+                  //? TabBar tabs have to equal with TabBarView children.
+                  physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics()),
+                  controller: viewController,
+                  children: [Markets(), Favorites()]),
+            )
           ],
         ),
       )),

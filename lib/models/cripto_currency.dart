@@ -13,6 +13,8 @@ class CryptroCurrency {
   double? circulatingSupply;
   double? ath;
   double? atl;
+  //todo: for favorite section > markets.dart
+  bool isFavorite = false;
 
   CryptroCurrency(
       {required this.id,
@@ -37,14 +39,15 @@ class CryptroCurrency {
         name: map["name"],
         image: map["image"],
         currentPrice: double.parse(map["current_price"].toString()),
-        marketCap: double.parse(map["market_cap"].toString()) ,
+        marketCap: double.parse(map["market_cap"].toString()),
         marketCapRank: map["market_cap_rank"],
         high24: double.parse(map["high_24h"].toString()),
-        low24:double.parse( map["low_24h"].toString()),
+        low24: double.parse(map["low_24h"].toString()),
         priceChange24: double.parse(map["price_change_24h"].toString()),
-        priceChangePercentage24: double.parse(map["price_change_percentage_24h"].toString()),
+        priceChangePercentage24:
+            double.parse(map["price_change_percentage_24h"].toString()),
         circulatingSupply: double.parse(map["circulating_supply"].toString()),
         ath: double.parse(map["ath"].toString()),
-        atl:double.parse( map["atl"].toString()));
+        atl: double.parse(map["atl"].toString()));
   }
 }

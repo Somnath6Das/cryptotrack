@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class DetailsPage extends StatefulWidget {
-  //todo: declear datatype/ 4
+  //todo: markets.dart > declear datatype/ 4
   final String id;
-  //todo: create constructor / 5
+  //todo: markets.dart > create constructor / 5
   DetailsPage({Key? key, required this.id}) : super(key: key);
 
   @override
@@ -40,13 +40,14 @@ class _DetailsPageState extends State<DetailsPage> {
         padding: const EdgeInsets.only(left: 20, right: 20),
         child: Consumer<MarketProvider>(
           builder: (context, marketProvider, child) {
-            //todo: make a intance of cryptrocurrency / 6
+            //todo: markets.dart > make a intance of cryptrocurrency / 6
             CryptroCurrency cryptroCurrency =
                 marketProvider.fetchCryptoById(widget.id);
-
+                
+            //? fetch data manully by RefreshIndicator.
             return RefreshIndicator(
               onRefresh: () async {
-               await marketProvider.fetchData();
+                await marketProvider.fetchData();
               },
               child: ListView(
                 physics: const BouncingScrollPhysics(
